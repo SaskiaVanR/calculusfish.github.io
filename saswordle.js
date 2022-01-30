@@ -1,9 +1,199 @@
 //javascript
+var letters = ["A","B","C","D","E","F","G","H","I","J","K","L",
+"M","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
 
-fetch('wordlewords.txt')
+var words = []
+
+var currentSquare = 1;
+var waiting = false;
+var currentGuess = "";
+var badGuess = [];
+var okayGuess = [];
+var goodGuess = [];
+var targetWord = "";
+var won = false;
+var lost = false;
+
+fetch('https://raw.githubusercontent.com/calculusfish/saswordle/main/wordlewords.txt')
 .then(response => response.text()) 
 .then(textString => {
-    console.log(textString);
+
+    words = textString.toUpperCase().split('\r\n');
+    getTargetWord();
+});
+
+fetch('https://raw.githubusercontent.com/calculusfish/saswordle/main/allwords5.txt')
+.then(response => response.text()) 
+.then(textString => {
+
+    allwords = textString.toUpperCase().split('\r\n');
+});
+
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getTargetWord(){
+	targetWord =  words[getRandomInt(0, words.length-1)];
+};
+
+
+function addLetter(letter){
+	if (waiting){
+		return;
+	};
+
+	$("#s"+currentSquare).text(letter);
+	if (currentSquare%5==0){
+		currentGuess +=letter;
+		currentSquare +=1;
+		waiting = true;
+	} else {
+		currentGuess +=letter;
+		currentSquare +=1;
+	}
+	
+};
+
+function undoLetter(){
+	if (currentGuess ==""){
+		return;
+	} else {
+		currentGuess = currentGuess.substring(0,currentGuess.length-1);
+		currentSquare -= 1;
+		waiting= false;
+		$("#s"+currentSquare).text("");
+		
+
+
+	}
+}
+
+function guessWord(){
+	if (currentGuess.length==5){
+		if(!allwords.includes(currentGuess)){
+			$("#subtext").text("!!! NOT A WORD !!!");
+			return 
+		}
+		for (let i=0; i<5;i++){
+			if (currentGuess[i]==targetWord[i]){
+				$("#s"+(currentSquare-(5-i))).parent().parent().addClass("goodGuess");
+				$("#s"+(currentSquare-(5-i))).addClass("goodGuess");
+				$("#"+currentGuess[i]).children().children().addClass("goodGuess");
+				$("#"+currentGuess[i]).addClass("goodGuess");
+				$("#"+currentGuess[i]).children().children().removeClass("okayGuess");
+				$("#"+currentGuess[i]).removeClass("okayGuess");
+				goodGuess+=[currentGuess[i]];
+			} else if(targetWord.includes(currentGuess[i])) {
+				if (!goodGuess.includes(currentGuess[i])){
+					$("#"+currentGuess[i]).children().children().addClass("okayGuess");
+					$("#"+currentGuess[i]).addClass("okayGuess");
+					okayGuess+=[currentGuess[i]];
+				};
+				$("#s"+(currentSquare-(5-i))).parent().parent().addClass("okayGuess");
+				$("#s"+(currentSquare-(5-i))).addClass("okayGuess");
+
+				
+			} else {
+				$("#s"+(currentSquare-(5-i))).parent().parent().addClass("badGuess");
+				$("#s"+(currentSquare-(5-i))).addClass("badGuess");
+				$("#"+currentGuess[i]).children().children().addClass("badGuess");
+				$("#"+currentGuess[i]).addClass("badGuess");
+				badGuess+=[currentGuess[i]];
+			}
+		}
+		if (currentGuess==targetWord){
+			won = true;
+			$("#subtext").text("CONGRATULATIONS! PRESS ENTER FOR A NEW WORD");
+		};
+		waiting = false;
+		currentGuess = "";
+		if (currentSquare==31){
+			$("#subtext").text("ANSWER: "+targetWord +" - PRESS ENTER FOR A NEW WORD");
+			lost = true;
+		}
+	}		
+}
+
+
+function newBoard(){
+	$(".key").removeClass("badGuess");
+	$(".key").removeClass("goodGuess");
+	$(".key").removeClass("okayGuess");
+	$(".key").removeClass("hoverkey");
+	$(".key").removeClass("hoverkeysmall");
+	$(".keyb").removeClass("badGuess");
+	$(".keyb").removeClass("goodGuess");
+	$(".keyb").removeClass("okayGuess");
+	$(".keyb").removeClass("hoverkey");
+	$(".keyb").removeClass("hoverkeysmall");
+	$(".squarebox").removeClass("badGuess");
+	$(".squarebox").removeClass("goodGuess");
+	$(".squarebox").removeClass("okayGuess");
+	$(".square").removeClass("badGuess");
+	$(".square").removeClass("goodGuess");
+	$(".square").removeClass("okayGuess");
+	$(".square").text("");
+	currentSquare = 1;
+	waiting = false;
+	currentGuess = "";
+	badGuess = [];
+	okayGuess = [];
+	goodGuess = [];
+	won = false;
+	lost = false;
+	getTargetWord();
+	$("#subtext").text("GUESS THE WORD");
+
+
+}
+$(".key").click(function(){
+	if (won){
+		if ("Enter"==$(this).attr('id') ){
+			newBoard();
+		} else {
+			return;
+		}
+	} else if (lost) {
+		$("#subtext").text("ANSWER: "+targetWord +" - PRESS ENTER FOR A NEW WORD");
+		if ("Enter"==$(this).attr('id') ){
+			newBoard();
+		}
+		return;
+	}
+	$("#subtext").text("GUESS A WORD");
+	if ("Enter"==$(this).attr('id') ){
+		guessWord();
+	} else if ("Undo"==$(this).attr('id') ) {
+		undoLetter();
+	} else {
+		var letter = $(this).attr('id');
+		addLetter(letter);
+	}
+
+});
+
+
+
+
+
+$(".key").mouseenter(function(){
+	if (["Enter", "Undo"].includes($(this).attr('id')) ){
+		$(this).children().children().addClass("hoverkeysmall");
+	} else {
+		$(this).children().children().addClass("hoverkey");
+	}
+
+	$(this).addClass("hoverkey");
+});
+
+$(".key").mouseleave(function(){
+	$(this).children().children().removeClass("hoverkey");
+	$(this).children().children().removeClass("hoverkeysmall");
+	$(this).removeClass("hoverkey");
 });
 
 

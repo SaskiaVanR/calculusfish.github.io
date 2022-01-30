@@ -3,6 +3,16 @@
 	font-family: "Consolas", "monaco", monospace;
 	text-align: center;
 	font-size: 50px;
+	margin-bottom: 0;
+	margin-top: 20px;
+}
+
+#subtext {
+	color: #2e3132;
+	font-family: "Consolas", "monaco", monospace;
+	text-align: center;
+	font-size: 15px;
+	margin-bottom:50px;
 }
 
 .board {
@@ -13,7 +23,7 @@
 	grid-row-gap: 5px;
 }
 
-.board div {
+.squarebox {
 	background-color: #edebe6;
 	border: 2px solid #9e9a8e;
 	border-radius:3px;
@@ -60,14 +70,14 @@
 	grid-row-gap: 5px;
 }
 
-.keyboardrow div {
+.key {
 	background-color: #edebe6;
 	border: 2px solid #9e9a8e;
 	border-radius:3px;
 	display: flex;
   	justify-content: center;
   	align-items: center; 
-
+  	cursor: pointer;
 }
 
 .keyboardrow div div {
@@ -91,4 +101,35 @@
 	font-size: 20px;
 	margin: auto;
 	color: #2e3132;
+}
+
+.badGuess {
+	background-color: #2e3132;
+	border-color: #2e3132;
+	color: white;
+}
+
+.goodGuess {
+	background-color: green;
+	border-color: green;
+	color: white;
+}
+
+.okayGuess {
+	background-color: orange;
+	border-color: orange;
+	color: white;
+}
+
+.hoverkey {
+	background-color: black;
+	border-color: black;
+	font-size: 30px;
+	color: white;
+}
+
+.hoverkeysmall {
+	background-color: black;
+	border-color: black;
+	color: white;
 }
