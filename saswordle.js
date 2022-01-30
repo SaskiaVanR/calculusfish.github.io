@@ -150,7 +150,7 @@ function newBoard(){
 
 
 }
-$(".key").click(function(){
+$(".key").mousedown(function(){
 	if (won){
 		if ("Enter"==$(this).attr('id') ){
 			newBoard();
