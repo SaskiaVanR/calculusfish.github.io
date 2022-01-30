@@ -1,0 +1,94 @@
+#headtext {
+	color: #2e3132;
+	font-family: "Consolas", "monaco", monospace;
+	text-align: center;
+	font-size: 50px;
+}
+
+.board {
+	display: inline-grid;
+	grid-template-columns: 50px 50px 50px 50px 50px;
+	grid-template-rows: 50px 50px 50px 50px 50px 50px;
+	grid-column-gap: 5px;
+	grid-row-gap: 5px;
+}
+
+.board div {
+	background-color: #edebe6;
+	border: 2px solid #9e9a8e;
+	border-radius:3px;
+	display: flex;
+  	justify-content: center;
+  	align-items: center; 
+
+}
+
+#boardwrapper {
+	margin: 0 auto;
+	text-align: center;
+}
+
+.keyboard {
+	margin: 0 auto;
+	text-align: center;
+	padding: 3px;
+}
+
+
+
+#keyboardrow1 {
+	display: inline-grid;
+	grid-template-columns: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px;
+	grid-template-rows: 40px;
+	grid-column-gap: 5px;
+	grid-row-gap: 5px;
+}
+
+#keyboardrow2 {
+	display: inline-grid;
+	grid-template-columns: 40px 40px 40px 40px 40px 40px 40px 40px 40px;
+	grid-template-rows: 40px;
+	grid-column-gap: 5px;
+	grid-row-gap: 5px;
+}
+
+#keyboardrow3 {
+	display: inline-grid;
+	grid-template-columns: 62px 40px 40px 40px 40px 40px 40px 40px 62px;
+	grid-template-rows: 40px;
+	grid-column-gap: 5px;
+	grid-row-gap: 5px;
+}
+
+.keyboardrow div {
+	background-color: #edebe6;
+	border: 2px solid #9e9a8e;
+	border-radius:3px;
+	display: flex;
+  	justify-content: center;
+  	align-items: center; 
+
+}
+
+.keyboardrow div div {
+	border: none;
+	font-family: "Consolas", "monaco", monospace;
+}
+
+.board div div {
+
+	font-family: "Consolas", "monaco", monospace;
+	border: none;
+}
+
+.square {
+	font-size: 35px;
+	margin: auto;
+	color: #52514e;
+}
+
+.keyb {
+	font-size: 20px;
+	margin: auto;
+	color: #2e3132;
+}
