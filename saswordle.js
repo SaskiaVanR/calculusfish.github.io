@@ -72,12 +72,72 @@ function undoLetter(){
 	}
 }
 
+function guessWordAlt(){
+if (currentGuess.length==5){
+		if(!allwords.includes(currentGuess)){
+			$("#subtext").text("!!! NOT A WORD !!!");
+			return 
+		}
+		var remainingTargets = targetWord;
+		var remainingGuess = currentGuess;
+		var greens = [];
+		for (let i=0; i<5;i++){
+			if (currentGuess[i]==targetWord[i]){
+				$("#s"+(currentSquare-(5-i))).parent().parent().addClass("goodGuess");
+				$("#s"+(currentSquare-(5-i))).addClass("goodGuess");
+				$("#"+currentGuess[i]).children().children().addClass("goodGuess");
+				$("#"+currentGuess[i]).addClass("goodGuess");
+				$("#"+currentGuess[i]).children().children().removeClass("okayGuess");
+				$("#"+currentGuess[i]).removeClass("okayGuess");
+				goodGuess+=[currentGuess[i]];
+				remainingTargets = remainingTargets.replace(currentGuess[i],"");
+				remainingGuess = remainingGuess.replace(currentGuess[i],"");
+				greens += [i];
+			}
+		}
+		for (let i=0; i<5;i++){
+			if (greens.includes(i)){
+				continue;
+			}
+			if(remainingTargets.includes(currentGuess[i])) {
+				if (!goodGuess.includes(currentGuess[i])){
+					$("#"+currentGuess[i]).children().children().addClass("okayGuess");
+					$("#"+currentGuess[i]).addClass("okayGuess");
+					okayGuess+=[currentGuess[i]];
+				};
+				$("#s"+(currentSquare-(5-i))).parent().parent().addClass("okayGuess");
+				$("#s"+(currentSquare-(5-i))).addClass("okayGuess");
+				remainingTargets = remainingTargets.replace(currentGuess[i],"");
+			} else {
+				$("#s"+(currentSquare-(5-i))).parent().parent().addClass("badGuess");
+				$("#s"+(currentSquare-(5-i))).addClass("badGuess");
+				$("#"+currentGuess[i]).children().children().addClass("badGuess");
+				$("#"+currentGuess[i]).addClass("badGuess");
+				badGuess+=[currentGuess[i]];
+			}
+		}
+		if (currentGuess==targetWord){
+			won = true;
+			$("#subtext").text("CONGRATULATIONS! PRESS ENTER FOR A NEW WORD");
+		};
+		waiting = false;
+		currentGuess = "";
+		if (currentSquare==31){
+			$("#subtext").text("ANSWER: "+targetWord +" - PRESS ENTER FOR A NEW WORD");
+			lost = true;
+		}
+	}		
+}
+
 function guessWord(){
 	if (currentGuess.length==5){
 		if(!allwords.includes(currentGuess)){
 			$("#subtext").text("!!! NOT A WORD !!!");
 			return 
 		}
+		var remainingTargets = targetWord;
+		var remainingGuess = currentGuess;
+
 		for (let i=0; i<5;i++){
 			if (currentGuess[i]==targetWord[i]){
 				$("#s"+(currentSquare-(5-i))).parent().parent().addClass("goodGuess");
@@ -166,7 +226,7 @@ $(".key").mousedown(function(){
 	}
 	$("#subtext").text("GUESS A WORD");
 	if ("Enter"==$(this).attr('id') ){
-		guessWord();
+		guessWordAlt();
 	} else if ("Undo"==$(this).attr('id') ) {
 		undoLetter();
 	} else {
